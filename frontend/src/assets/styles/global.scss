@@ -1,0 +1,85 @@
+@import './variables.scss';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #app {
+  width: 100%;
+  height: 100%;
+  font-family: 'PingFang SC', 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+  background: $dark-bg-solid;
+  color: $text-primary;
+  overflow: hidden;
+}
+
+// 全局滚动条样式
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(123, 28, 181, 0.1);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(123, 28, 181, 0.4);
+  border-radius: 3px;
+
+  &:hover {
+    background: rgba(123, 28, 181, 0.6);
+  }
+}
+
+// 动画
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(123, 28, 181, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(123, 28, 181, 0.6); }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.3s ease;
+}
+
+.slide-enter-from {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.slide-leave-to {
+  transform: translateX(-100%);
+  opacity: 0;
+}
