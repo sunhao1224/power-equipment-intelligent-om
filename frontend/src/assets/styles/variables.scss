@@ -1,38 +1,13 @@
-// 清华紫主题变量
-$primary-color: #791CB5;
-$primary-dark: #5B1499;
-$primary-light: #9B4DCA;
-$primary-lighter: #F3E5F9;
-
-$accent-color: #FF8C38;
-$success-color: #26C6DA;
-$warning-color: #FFB300;
-$danger-color: #E53935;
-
-$dark-bg: linear-gradient(135deg, #1a0533 0%, #2d1054 50%, #1a0533 100%);
-$dark-bg-solid: #1a0533;
-$dark-bg-card: rgba(123, 28, 181, 0.15);
-
-$text-primary: #ffffff;
-$text-secondary: rgba(255, 255, 255, 0.75);
-$text-muted: rgba(255, 255, 255, 0.45);
-
-$border-color: rgba(123, 28, 181, 0.3);
-$border-radius: 12px;
-$border-radius-sm: 8px;
-
-$sidebar-width: 240px;
-$sidebar-collapsed-width: 64px;
-$header-height: 60px;
-
-// Element Plus 主题覆盖
-:root {
-  --el-color-primary: #{$primary-color};
-  --el-color-primary-light-3: #{$primary-light};
-  --el-color-primary-light-5: #b366d9;
-  --el-color-primary-light-7: #cc99e6;
-  --el-color-primary-light-8: #d9b3ec;
-  --el-color-primary-light-9: #{$primary-lighter};
-  --el-color-primary-dark-2: #{$primary-dark};
-  --el-border-radius-base: 8px;
-}
+$bg: #08090c;
+$panel: #101116;
+$panel-soft: #14161d;
+$line: #252832;
+$line-soft: #1b1d25;
+$text: #f4f7fb;
+$muted: #8b909c;
+$muted-2: #626876;
+$purple: #a78bfa;
+$cyan: #67e8f9;
+$green: #86efac;
+$red: #fb7185;
+$amber: #fbbf24;

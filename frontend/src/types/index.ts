@@ -1,208 +1,165 @@
-// ===== 设备相关 =====
-export interface Equipment {
-  id: string
-  name: string
-  type: 'transformer' | 'breaker' | 'gis'
-  model: string
-  location: string
-  status: 'online' | 'offline' | 'warning' | 'error'
-  healthScore: number
-  healthLevel: 'healthy' | 'attention' | 'abnormal' | 'critical'
-  lastMaintenance: string
-  installDate: string
-  ratedVoltage: string
-  ratedCapacity: string
-}
+export type RiskLevel = 'normal' | 'important' | 'urgent' | 'low' | 'medium' | 'high' | 'critical'
+export type AgentStatus = 'pending' | 'spawned' | 'running' | 'tool_calling' | 'completed' | 'failed' | 'need_human_review'
 
-export interface EquipmentStats {
-  total: number
-  online: number
-  warning: number
-  offline: number
-}
-
-export interface EquipmentTypeDistribution {
-  type: string
-  count: number
-  percentage: number
-}
-
-// ===== 告警相关 =====
-export interface Alarm {
-  id: string
-  equipmentId: string
-  equipmentName: string
-  level: 'info' | 'warning' | 'danger' | 'critical'
-  message: string
-  timestamp: string
-  status: 'active' | 'acknowledged' | 'resolved'
-}
-
-export interface AlarmTrend {
-  date: string
-  count: number
-}
-
-// ===== 健康相关 =====
-export interface HealthDistribution {
-  healthy: number
-  attention: number
-  abnormal: number
-  critical: number
-}
-
-// ===== 聊天相关 =====
-export interface ChatMessage {
-  id: string
-  role: 'user' | 'assistant'
-  content: string
-  timestamp: string
-  confidence?: number
-  sources?: KnowledgeSource[]
-}
-
-export interface KnowledgeSource {
-  id: string
-  title: string
-  type: 'standard' | 'manual' | 'history' | 'expert'
-  relevance: number
-  excerpt: string
-}
-
-export interface ChatSession {
-  id: string
-  title: string
-  createdAt: string
-  updatedAt: string
-  messages: ChatMessage[]
-}
-
-// ===== 诊断相关 =====
-export interface SensorData {
-  name: string
-  value: number
-  unit: string
-  status: 'normal' | 'warning' | 'danger'
-  threshold?: { min: number; max: number }
-}
-
-export interface DGAData {
-  h2: number
-  ch4: number
-  c2h2: number
-  c2h4: number
-  c2h6: number
-  co: number
-  co2: number
-  totalHydrocarbon: number
-}
-
-export interface AgentNode {
-  id: string
-  name: string
-  nameEn: string
-  status: 'pending' | 'running' | 'completed' | 'error'
-  progress: number
-  description: string
-  result?: any
-}
-
-export interface DiagnosisResult {
-  equipmentId: string
-  equipmentName: string
-  timestamp: string
-  overallConfidence: number
-  rootCause: RootCauseAnalysis
-  batchRisk: BatchRiskAnalysis
-  fmea: FMEAAnalysis
-  recommendation: MaintenanceRecommendation
-}
-
-export interface RootCauseAnalysis {
-  primaryCause: string
-  confidence: number
-  evidenceChain: EvidenceNode[]
-  contributingFactors: string[]
-}
-
-export interface EvidenceNode {
-  id: string
-  label: string
-  type: 'observation' | 'test' | 'analysis' | 'conclusion'
-  children?: EvidenceNode[]
-  confidence?: number
-}
-
-export interface BatchRiskAnalysis {
-  affectedEquipment: string[]
-  riskLevel: 'low' | 'medium' | 'high'
-  commonDefect: string
-  recommendation: string
-}
-
-export interface FMEAAnalysis {
-  failureMode: string
-  effect: string
-  severity: number
-  occurrence: number
-  detection: number
-  rpn: number
-}
-
-export interface MaintenanceRecommendation {
-  actions: MaintenanceAction[]
-  priority: 'low' | 'medium' | 'high' | 'urgent'
-  estimatedCost: string
-  estimatedDuration: string
-}
-
-export interface MaintenanceAction {
-  id: string
-  title: string
-  description: string
-  type: 'inspection' | 'repair' | 'replacement' | 'monitoring'
-  urgency: string
-}
-
-// ===== 维护决策相关 =====
-export interface MaintenancePlan {
-  id: string
-  equipmentId: string
-  equipmentName: string
-  type: 'preventive' | 'corrective' | 'predictive'
-  scheduledDate: string
-  status: 'pending_review' | 'approved' | 'in_progress' | 'completed'
-  priority: 'low' | 'medium' | 'high' | 'urgent'
-  description: string
-  estimatedCost: string
-  assignedTo: string
-}
-
-export interface WorkOrder {
-  id: string
-  title: string
-  equipmentId: string
-  equipmentName: string
-  status: 'pending_review' | 'approved' | 'in_progress' | 'completed'
-  priority: 'low' | 'medium' | 'high' | 'urgent'
-  createdAt: string
-  scheduledDate: string
-  description: string
-  actions: string[]
-  estimatedCost: string
-  assignedTo: string
-}
-
-// ===== API 响应 =====
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T> {
   code: number
   message: string
   data: T
 }
 
-export interface PaginatedResponse<T = any> {
-  items: T[]
-  total: number
-  page: number
-  pageSize: number
+export interface Equipment {
+  equipment_id: string
+  name: string
+  type: string
+  manufacturer: string
+  model: string
+  batch_no: string
+  location: string
+  voltage_level: string
+  commissioned_at: string
+  health_score: number
+  risk_level: RiskLevel
+}
+
+export interface MockEvent {
+  event_id: string
+  equipment_id: string
+  title: string
+  event_type: 'mock_event'
+  priority: 'normal' | 'important' | 'urgent'
+  time_window: string
+  sensor_data: Record<string, number>
+  summary: string
+}
+
+export interface DiagnosisInput {
+  equipment_id: string
+  event_type: 'mock_event' | 'historical_replay' | 'manual_upload'
+  event_id?: string
+  sensor_data?: Record<string, unknown>
+  time_window?: string
+  priority?: 'normal' | 'important' | 'urgent'
+  edge_context?: Record<string, unknown>
+}
+
+export interface AgentNode {
+  agent_id: string
+  name: string
+  role: string
+  status: AgentStatus
+  progress: number
+  confidence: number
+  evidence_count: number
+  duration_ms: number
+  summary: string
+}
+
+export interface EvidenceItem {
+  evidence_id: string
+  title: string
+  source_type: 'regulation' | 'case' | 'graph' | 'timeseries' | 'standard'
+  source_id: string
+  content: string
+  confidence: number
+  linked_nodes: string[]
+  tags: string[]
+}
+
+export interface ToolCall {
+  call_id: string
+  agent_id: string
+  tool_name: string
+  request_summary: string
+  response_summary: string
+  latency_ms: number
+  status: string
+}
+
+export interface SkillCall {
+  call_id: string
+  agent_id: string
+  skill_name: string
+  skill_version: string
+  status: string
+}
+
+export interface AgentTrace {
+  trace_id: string
+  diagnosis_id: string
+  orchestrator_id: string
+  status: string
+  started_at: string
+  completed_at?: string
+  agent_steps: AgentNode[]
+  tool_calls: ToolCall[]
+  skill_calls: SkillCall[]
+  evidence_links: EvidenceItem[]
+}
+
+export interface BatchRiskItem {
+  equipment_id: string
+  equipment_name: string
+  manufacturer: string
+  model: string
+  batch_no: string
+  location: string
+  risk_level: RiskLevel
+  probability_6m: number
+  probability_12m: number
+  probability_24m: number
+  reason: string
+}
+
+export interface FmeaItem {
+  failure_mode: string
+  component: string
+  severity: number
+  occurrence: number
+  detection: number
+  rpn: number
+  recommendation: string
+}
+
+export interface WorkOrderDraft {
+  title: string
+  priority: 'normal' | 'important' | 'urgent'
+  actions: string[]
+  required_roles: string[]
+  spare_parts: string[]
+  safety_notes: string[]
+  estimated_hours: number
+}
+
+export interface DiagnosisReport {
+  report_id: string
+  diagnosis_id: string
+  equipment_id: string
+  title: string
+  risk_level: 'normal' | 'important' | 'urgent'
+  root_causes: Array<{ name: string; confidence: number; evidence_ids: string[] }>
+  component_path: string[]
+  batch_risks: BatchRiskItem[]
+  fmea: FmeaItem[]
+  work_order: WorkOrderDraft
+  review_findings: Array<{ level: string; title: string; detail: string }>
+  evidence_ids: string[]
+  created_at: string
+}
+
+export interface DiagnosisTask {
+  diagnosis_id: string
+  orchestrator_id: string
+  agent_trace_id: string
+  status: string
+  input: DiagnosisInput
+  agents_output: AgentNode[]
+  report?: DiagnosisReport
+  review_findings: Array<Record<string, unknown>>
+}
+
+export interface WsEvent {
+  event_type: string
+  diagnosis_id: string
+  timestamp: string
+  payload: Record<string, any>
 }
